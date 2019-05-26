@@ -1,4 +1,7 @@
-# high-res-stereo-cvpr19
+# Hierarchical Deep Stereo Matching on High Resolution Images
+
+[Project website](http://www.contrib.andrew.cmu.edu/~gengshay/cvpr19stereo)
+
 # Requirements
 - python 2.7.15
 - pytorch 0.4.0
