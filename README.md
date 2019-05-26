@@ -2,17 +2,17 @@
 
 [Project website](http://www.contrib.andrew.cmu.edu/~gengshay/cvpr19stereo)
 
-# Requirements
+## Requirements
 - python 2.7.15
 - pytorch 0.4.0
 
-# Weights
+## Weights
 [Download](https://drive.google.com/file/d/1BlH7IafX-X0A5kFPd50WkZXqxo0_gtoI/view?usp=sharing)
 
-# Data
+## Data
 [High-res-real-stereo (HR-RS)](https://drive.google.com/file/d/1UTkOgw5IO-GcVYapzCdzrmjbjkGMyOH4/view?usp=sharing)
 
-# Inference
+## Inference
 Example:
 ```
 CUDA_VISIBLE_DEVICES=3 python submission.py --datapath ./data-mbtest/   --outdir ./mboutput --loadmodel ./weights/final-768px.tar  --testres 1 --clean 0.8 --max_disp -1
@@ -24,12 +24,12 @@ CUDA_VISIBLE_DEVICES=3 python submission.py --datapath ./data-HRRS/   --outdir .
 python eval_disp.py --indir ./output --gtdir ./data-HRRS/
 ```
 
-# Parameters
+## Parameters
 - testres: 1 is full resolution, and 0.5 is half resolution, and so on
 - max_disp: maximum disparity range to search
 - clean: threshold of cleaning. clean=0 means removing all the pixels.
 
-# Citation
+## Citation
 ```
 @InProceedings{Yang2019HSM,
   author    = {Gengshan Yang and Joshua Manela and Michael Happold and Deva Ramanan},
@@ -39,6 +39,6 @@ python eval_disp.py --indir ./output --gtdir ./data-HRRS/
 }
 ```
 
-# Acknowledgement
+## Acknowledgement
 Part of the code is borrowed from [PSMNet](https://github.com/JiaRenChang/PSMNet) and [pytorch-semseg](https://github.com/meetshah1995/pytorch-semseg).
 
