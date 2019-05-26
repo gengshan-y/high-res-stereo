@@ -1,0 +1,14 @@
+__pycache__/
+*.lprof
+*.pyc
+models/*.pyc
+trained*
+output*
+*.npy
+.ipynb_checkpoints/*
+.ipynb_checkpoints
+weights/
+*.ipynb
+data-HRRS/
+mboutput/
+*.zip
