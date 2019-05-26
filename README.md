@@ -26,4 +26,16 @@ python eval_disp.py --indir ./output --gtdir ./data-HRRS/
 - max_disp: maximum disparity range to search
 - clean: threshold of cleaning. clean=0 means removing all the pixels.
 
+# Citation
+```
+@InProceedings{Yang2019HSM,
+  author    = {Gengshan Yang and Joshua Manela and Michael Happold and Deva Ramanan},
+  title     = {Hierarchical Deep Stereo Matching on High-resolution Images},
+  booktitle = CVPR,
+  year      = {2019},
+}
+```
+
+# Acknowledgement
+Part of the code is borrowed from [PSMNet](https://github.com/JiaRenChang/PSMNet) and [pytorch-semseg](https://github.com/meetshah1995/pytorch-semseg).
 
