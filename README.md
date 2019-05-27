@@ -5,6 +5,8 @@
 left image
 <img src="mboutput/CrusadeP-disp.png" width="400">
 disparity map
+<img src="mboutput/CrusadeP/capture_000.png" width="400">
+3D projection
 <img src="mboutput/CrusadeP-ent.png" width="400">
 uncertainty map (brighter->higher uncertainty)
 
@@ -30,6 +32,8 @@ CUDA_VISIBLE_DEVICES=3 python submission.py --datapath ./data-HRRS/   --outdir .
 python eval_disp.py --indir ./output --gtdir ./data-HRRS/
 ```
 
+And use [cvkit](https://github.com/roboception/cvkit) to visualize in 3D.
+
 ## Parameters
 - testres: 1 is full resolution, and 0.5 is half resolution, and so on
 - max_disp: maximum disparity range to search
@@ -46,5 +50,7 @@ python eval_disp.py --indir ./output --gtdir ./data-HRRS/
 ```
 
 ## Acknowledgement
-Part of the code is borrowed from [PSMNet](https://github.com/JiaRenChang/PSMNet) and [pytorch-semseg](https://github.com/meetshah1995/pytorch-semseg).
+Part of the code is borrowed from [MiddEval-SDK](http://vision.middlebury.edu/stereo/submit3/), [PSMNet](https://github.com/JiaRenChang/PSMNet) and [pytorch-semseg](https://github.com/meetshah1995/pytorch-semseg).
+
+
 
