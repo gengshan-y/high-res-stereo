@@ -10,5 +10,6 @@ output*
 weights/
 *.ipynb
 data-HRRS/
-mboutput/
+mboutput/*.npy
+mboutput/CrusadeP
 *.zip

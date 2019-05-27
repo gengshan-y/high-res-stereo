@@ -1,4 +1,8 @@
 # Hierarchical Deep Stereo Matching on High Resolution Images
+<img src="data-mbtest/CrusadeP/im0.png" width="200">
+<img src="mboutput/CrusadeP-disp.png" width="200">
+<img src="mboutput/CrusadeP-ent.png" width="200">
+left image, disparity map, and uncertainty map (brighter->higher uncertainty)
 
 [Project website](http://www.contrib.andrew.cmu.edu/~gengshay/cvpr19stereo)
 
