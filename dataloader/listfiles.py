@@ -9,19 +9,7 @@ import glob
 
 
 def dataloader(filepath):
-  img_list = ['Adirondack',  'Motorcycle',    'PianoL',
-              'Playtable',   'Shelves',       'ArtL',
-              'MotorcycleE', 'Pipes',         'PlaytableP',
-              'Teddy',       'Jadeplant',     'Piano',
-              'Playroom',    'Recycle',       'Vintage']
-
-  img_list = ['Australia',   'Bicycle2',   'Classroom2E',
-              'Crusade',   'Djembe',   'Hoops',       'Newkuba',
-              'Staircase', 'AustraliaP',  'Classroom2',  'Computer',     
-              'CrusadeP',  'DjembeL',  'Livingroom',  'Plants']
-
   img_list = [i.split('/')[-1] for i in glob.glob('%s/*'%filepath) if os.path.isdir(i)]
-  #img_list *= 10
 
   left_train  = ['%s/%s/im0.png'% (filepath,img) for img in img_list]  
   right_train = ['%s/%s/im1.png'% (filepath,img) for img in img_list]

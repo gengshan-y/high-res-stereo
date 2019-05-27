@@ -132,7 +132,7 @@ class decoderBlock(nn.Module):
             #    m.running_var.data.fill_(1)
 
 
-    def forward(self,fvl,fvr):
+    def forward(self,fvl):
         # left
         fvl = self.convs(fvl)
         # pooling
@@ -164,9 +164,7 @@ class decoderBlock(nn.Module):
             else:
                 costl = self.classify(fvl)
 
-        fvr = fvl
-        costr = costl
-        return fvl,costl.squeeze(1),fvr,costr.squeeze(1)
+        return fvl,costl.squeeze(1)
 
 class CConv3d(nn.Conv3d):
     def __init__(self, in_channels, out_channels, kernel_size, stride=1,
