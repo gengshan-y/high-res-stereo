@@ -11,5 +11,6 @@ weights/
 *.ipynb
 data-HRRS/
 mboutput/*.npy
-mboutput/CrusadeP
+mboutput/CrusadeP/*.pfm
+mboutput/CrusadeP/*.txt
 *.zip
