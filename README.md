@@ -44,7 +44,7 @@ And use [cvkit](https://github.com/roboception/cvkit) to visualize in 3D.
 @InProceedings{Yang2019HSM,
   author    = {Gengshan Yang and Joshua Manela and Michael Happold and Deva Ramanan},
   title     = {Hierarchical Deep Stereo Matching on High-resolution Images},
-  booktitle = CVPR,
+  booktitle = {CVPR},
   year      = {2019},
 }
 ```
