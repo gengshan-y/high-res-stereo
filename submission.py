@@ -137,7 +137,7 @@ def main():
         pred_disp = cv2.resize(pred_disp/args.testres,(imgsize[1],imgsize[0]),interpolation=cv2.INTER_LINEAR)
 
         # clip while keep inf
-        invalid = pred_disp == np.inf
+        invalid = np.logical_or(pred_disp == np.inf,pred_disp!=pred_disp)
         pred_disp[invalid] = np.inf
 
         np.save('%s/%s-disp.npy'% (args.outdir, idxname.split('/')[0]),(pred_disp))
