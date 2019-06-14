@@ -20,10 +20,10 @@ uncertainty map (brighter->higher uncertainty)
 ## Data
 
 ### train/val
--[Middlebury (train set and additional images)](https://drive.google.com/file/d/1jJVmGKTDElyKiTXoj6puiK4vUY9Ahya7/view?usp=sharing)
--[High-res-virtual-stereo (HR-VS)](https://drive.google.com/file/d/1SgEIrH_IQTKJOToUwR1rx4-237sThUqX/view?usp=sharing)
--[KITTI-2012&2015](http://www.cvlibs.net/datasets/kitti/eval_stereo.php)
--[SceneFlow](https://lmb.informatik.uni-freiburg.de/resources/datasets/SceneFlowDatasets.en.html)
+- [Middlebury (train set and additional images)](https://drive.google.com/file/d/1jJVmGKTDElyKiTXoj6puiK4vUY9Ahya7/view?usp=sharing)
+- [High-res-virtual-stereo (HR-VS)](https://drive.google.com/file/d/1SgEIrH_IQTKJOToUwR1rx4-237sThUqX/view?usp=sharing)
+- [KITTI-2012&2015](http://www.cvlibs.net/datasets/kitti/eval_stereo.php)
+- [SceneFlow](https://lmb.informatik.uni-freiburg.de/resources/datasets/SceneFlowDatasets.en.html)
 
 ### test
 [High-res-real-stereo (HR-RS)](https://drive.google.com/file/d/1UTkOgw5IO-GcVYapzCdzrmjbjkGMyOH4/view?usp=sharing)
