@@ -11,26 +11,26 @@ from models.utils import unet
 from matplotlib import pyplot as plt
 
 class HSMNet(nn.Module):
-    def __init__(self, maxdisp,clean,debug=False,args=None):
+    def __init__(self, maxdisp,clean,debug=False,level=1):
         super(HSMNet, self).__init__()
         self.debug = debug
         self.maxdisp = maxdisp
         self.clean = clean
         self.feature_extraction = unet()
-        self.args = args
-        self.level = args.level
+        self.level = level
+            
     
         # block 4
-        self.decoder6 = decoderBlock(6,32,32,12,up=True,args = args, pool=True)
+        self.decoder6 = decoderBlock(6,32,32,12,up=True, pool=True)
         if self.level > 2:
-            self.decoder5 = decoderBlock(6,32,32,12, up=False,args = args, pool=True)
+            self.decoder5 = decoderBlock(6,32,32,12, up=False, pool=True)
         else:
-            self.decoder5 = decoderBlock(6,32,32,12, up=True,args = args, pool=True)
+            self.decoder5 = decoderBlock(6,32,32,12, up=True, pool=True)
             if self.level > 1:
-                self.decoder4 = decoderBlock(6,32,32,12,  up=False,args = args)
+                self.decoder4 = decoderBlock(6,32,32,12,  up=False)
             else:
-                self.decoder4 = decoderBlock(6,32,32,12,  up=True,args = args)
-                self.decoder3 = decoderBlock(5,32,32,12,  stride=(2,1,1),up=False,args = args, nstride=1)
+                self.decoder4 = decoderBlock(6,32,32,12,  up=True)
+                self.decoder3 = decoderBlock(5,32,32,12,  stride=(2,1,1),up=False, nstride=1)
         # reg
         self.disp_reg8 = disparityregression(self.maxdisp,16)
         self.disp_reg16 = disparityregression(self.maxdisp,16)
@@ -90,14 +90,12 @@ class HSMNet(nn.Module):
         else:
             final_reg = self.disp_reg8
 
-        if self.clean >0:
-            pred3,entropy = final_reg(F.softmax(cost3,1),ifent=True)
-            pred3[entropy>self.clean] = np.inf
+        if self.training:
+            pred3 = final_reg(F.softmax(cost3,1)); entropy = pred3  # to save memory
         else:
-             # expectation
-             pred3 = final_reg(F.softmax(cost3,1)); entropy = pred3
-
-        uncertainty = entropy
+            pred3,entropy = final_reg(F.softmax(cost3,1),ifent=True)
+        if self.clean >0:
+            pred3[entropy>self.clean] = np.inf
 
         if self.training:
             cost6 = F.upsample((cost6).unsqueeze(1), [self.disp_reg8.disp.shape[1], left.size()[2],left.size()[3]], mode='trilinear').squeeze(1)
@@ -107,6 +105,6 @@ class HSMNet(nn.Module):
             pred5 = self.disp_reg16(F.softmax(cost5,1))
             pred4 = self.disp_reg16(F.softmax(cost4,1))
             stacked = [pred3,pred4,pred5,pred6]   
-            return stacked, pred3,pred4,pred5,pred6,uncertainty
+            return stacked,entropy
         else:
-            return pred3,torch.squeeze(uncertainty)
+            return pred3,torch.squeeze(entropy)

@@ -86,7 +86,7 @@ class disparityregression(nn.Module):
 
 
 class decoderBlock(nn.Module):
-    def __init__(self, nconvs, inchannelF,channelF,depthN,stride=(1,1,1),up=False,args = None, nstride=1,pool=False):
+    def __init__(self, nconvs, inchannelF,channelF,depthN,stride=(1,1,1),up=False, nstride=1,pool=False):
         super(decoderBlock, self).__init__()
         self.pool=pool
         stride = [stride]*nstride + [(1,1,1)] * (nconvs-nstride)

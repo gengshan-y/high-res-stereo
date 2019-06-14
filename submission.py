@@ -37,10 +37,10 @@ args = parser.parse_args()
 
 # dataloader
 from dataloader import listfiles as DA
-test_left_img, test_right_img = DA.dataloader(args.datapath)
+test_left_img, test_right_img, _, _ = DA.dataloader(args.datapath)
 
 # construct model
-model = hsm(128,args.clean,args=args)
+model = hsm(128,args.clean,level=args.level)
 model = nn.DataParallel(model, device_ids=[0])
 model.cuda()
 
