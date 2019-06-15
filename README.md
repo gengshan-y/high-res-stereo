@@ -1,12 +1,14 @@
 # Hierarchical Deep Stereo Matching on High Resolution Images
 [Project website](http://www.contrib.andrew.cmu.edu/~gengshay/cvpr19stereo)
 
+<img src="./middlebury-benchmark.png" width="400">
+performance on Middlebury benchmark
 <img src="data-mbtest/CrusadeP/im0.png" width="400">
 left image
-<img src="mboutput/CrusadeP-disp.png" width="400">
-disparity map
 <img src="mboutput/CrusadeP/capture_000.png" width="400">
 3D projection
+<img src="mboutput/CrusadeP-disp.png" width="400">
+disparity map
 <img src="mboutput/CrusadeP-ent.png" width="400">
 uncertainty map (brighter->higher uncertainty)
 
