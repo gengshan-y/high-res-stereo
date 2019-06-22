@@ -2,7 +2,7 @@
 [Project website](http://www.contrib.andrew.cmu.edu/~gengshay/cvpr19stereo)
 
 <img src="./middlebury-benchmark.png" width="400">
-performance on Middlebury benchmark
+performance on Middlebury benchmark (y-axis: the lower the better)
 <img src="data-mbtest/CrusadeP/im0.png" width="400">
 left image
 <img src="mboutput/CrusadeP/capture_000.png" width="400">
@@ -36,7 +36,7 @@ uncertainty map (brighter->higher uncertainty)
 ```
 CUDA_VISIBLE_DEVICES=0,1,2,3 python train.py --maxdisp 384 --batchsize 24 --database /d/ --logname log1 --savemodel /somewhere/  --epochs 10
 ```
-3. Evalute on Middlebury additional images and KITTI validation set.
+3. Evalute on Middlebury additional images and KITTI validation set. After 10 epochs, average error on Middlebury *additional* images with half-res should be around 4.6 (excluding Shopvac).
 
 ## Inference
 Example:
@@ -59,7 +59,7 @@ And use [cvkit](https://github.com/roboception/cvkit) to visualize in 3D.
 
 ## Citation
 ```
-@InProceedings{Yang_2019_CVPR,
+@InProceedings{yang2019hsm,
 author = {Yang, Gengshan and Manela, Joshua and Happold, Michael and Ramanan, Deva},
 title = {Hierarchical Deep Stereo Matching on High-Resolution Images},
 booktitle = {The IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},

@@ -19,8 +19,6 @@ parser.add_argument('--indir', type=str ,default='/ssd/carla-highres/carlaF/',
 parser.add_argument('--gtdir', type=str ,default='/ssd/carla-highres/testF/',
                     help='resolution')
 args = parser.parse_args()
-#imgnames=glob.glob('/ssd/carla-highres/carlaF/*')
-#imgnames=glob.glob('/data/ptmodel/baseline-mb-fres5-asymm-pool3-cmb-flip-ydisp-cover-all2/carlaH/*')
 
 method = args.method
 numr = (0.1450+0.1537)*3668.61736086358178
@@ -46,7 +44,6 @@ for level in levels:
     for i,imgname in enumerate(imgnames):
         if not os.path.isdir(imgname):
             continue
-        #print imgname
         gt = readPFM('%s/%s/disp0GT.pfm'%(args.gtdir,imgname.split('/')[-1]))[0]
         mask = gt!=np.inf
         gt_depth = gt.copy()
@@ -57,16 +54,6 @@ for level in levels:
                 mask[int(b[0][1]):int(b[1][1]),\
                      int(b[0][0]):int(b[1][0])] = 0
 
-        #if i==2:
-        #    im = plt.imread('%s/%s/im0.png'%(args.gtdir,imgname.split('/')[-1]))
-        #    plt.imshow(im)
-        #    ax = plt.gca()
-        #    pdb.set_trace()
-        #    rect = patches.Rectangle((  b[0][0],b[0][1]),\
-        #                     np.abs(b[1][0]-b[0][0]),
-        #                     np.abs(b[1][1]-b[0][1]),linewidth=1,edgecolor='r',facecolor='none')
-        #    ax.add_patch(rect)
-        #    plt.show(block=False)
         disp = readPFM('%s/disp0%s.pfm'%(imgname,method))[0]
         if disp.shape != gt.shape:
             ratio = float(gt.shape[1])/disp.shape[1]

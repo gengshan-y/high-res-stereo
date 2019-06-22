@@ -13,7 +13,8 @@ import time
 from models.submodule import *
 from utils.eval import mkdir_p, save_pfm
 from utils.preprocess import get_transform
-cudnn.benchmark = True
+#cudnn.benchmark = True
+cudnn.benchmark = False
 
 parser = argparse.ArgumentParser(description='HSM')
 parser.add_argument('--datapath', default='./data-mbtest/',

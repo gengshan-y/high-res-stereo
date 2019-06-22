@@ -90,11 +90,10 @@ class HSMNet(nn.Module):
         else:
             final_reg = self.disp_reg8
 
-        if self.training:
+        if self.training or self.clean==-1:
             pred3 = final_reg(F.softmax(cost3,1)); entropy = pred3  # to save memory
         else:
             pred3,entropy = final_reg(F.softmax(cost3,1),ifent=True)
-        if self.clean >0:
             pred3[entropy>self.clean] = np.inf
 
         if self.training:
