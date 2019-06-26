@@ -1,6 +1,6 @@
 # Hierarchical Deep Stereo Matching on High Resolution Images
 <img src="http://www.contrib.andrew.cmu.edu/~gengshay/wordpress/wp-content/uploads/2019/06/cvpr19-middlebury1-small.gif" width="400">
-qualitative results on Middlebury
+qualitative results on Middlebury (refer to [project webpage](http://www.contrib.andrew.cmu.edu/~gengshay/cvpr19stereo) for more results)
 <img src="./middlebury-benchmark.png" width="400">
 performance on Middlebury benchmark (y-axis: the lower the better)
 
