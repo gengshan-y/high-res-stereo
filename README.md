@@ -1,16 +1,8 @@
-<img src="http://www.contrib.andrew.cmu.edu/~gengshay/wordpress/wp-content/uploads/2019/06/cvpr19-middlebury1.gif" width="400">
+# Hierarchical Deep Stereo Matching on High Resolution Images
+<img src="http://www.contrib.andrew.cmu.edu/~gengshay/wordpress/wp-content/uploads/2019/06/cvpr19-middlebury1-small.gif" width="400">
 qualitative results on Middlebury
 <img src="./middlebury-benchmark.png" width="400">
 performance on Middlebury benchmark (y-axis: the lower the better)
-<img src="data-mbtest/CrusadeP/im0.png" width="400">
-left image
-<img src="mboutput/CrusadeP/capture_000.png" width="400">
-3D projection
-<img src="mboutput/CrusadeP-disp.png" width="400">
-disparity map
-<img src="mboutput/CrusadeP-ent.png" width="400">
-uncertainty map (brighter->higher uncertainty)
-# Hierarchical Deep Stereo Matching on High Resolution Images
 
 ## Requirements
 - python 2.7.15
@@ -51,6 +43,16 @@ python eval_disp.py --indir ./output --gtdir ./data-HRRS/
 ```
 
 And use [cvkit](https://github.com/roboception/cvkit) to visualize in 3D.
+
+## Example outputs
+<img src="data-mbtest/CrusadeP/im0.png" width="400">
+left image
+<img src="mboutput/CrusadeP/capture_000.png" width="400">
+3D projection
+<img src="mboutput/CrusadeP-disp.png" width="400">
+disparity map
+<img src="mboutput/CrusadeP-ent.png" width="400">
+uncertainty map (brighter->higher uncertainty)
 
 ## Parameters
 - testres: 1 is full resolution, and 0.5 is half resolution, and so on
