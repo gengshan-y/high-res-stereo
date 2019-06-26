@@ -1,11 +1,13 @@
 # Hierarchical Deep Stereo Matching on High Resolution Images
+Architecture:
+<img src="./architecture.png" width="800">
+
+Qualitative results on Middlebury (refer to [project webpage](http://www.contrib.andrew.cmu.edu/~gengshay/cvpr19stereo) for more results)
 <img src="http://www.contrib.andrew.cmu.edu/~gengshay/wordpress/wp-content/uploads/2019/06/cvpr19-middlebury1-small.gif" width="400">
 
-qualitative results on Middlebury (refer to [project webpage](http://www.contrib.andrew.cmu.edu/~gengshay/cvpr19stereo) for more results)
-
+Performance on Middlebury benchmark (y-axis: the lower the better)
 <img src="./middlebury-benchmark.png" width="400">
 
-performance on Middlebury benchmark (y-axis: the lower the better)
 
 ## Requirements
 - python 2.7.15
