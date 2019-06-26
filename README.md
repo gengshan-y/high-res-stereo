@@ -1,6 +1,5 @@
-# Hierarchical Deep Stereo Matching on High Resolution Images
-[Project website](http://www.contrib.andrew.cmu.edu/~gengshay/cvpr19stereo)
-
+<img src="http://www.contrib.andrew.cmu.edu/~gengshay/wordpress/wp-content/uploads/2019/06/cvpr19-middlebury1.gif" width="400">
+qualitative results on Middlebury
 <img src="./middlebury-benchmark.png" width="400">
 performance on Middlebury benchmark (y-axis: the lower the better)
 <img src="data-mbtest/CrusadeP/im0.png" width="400">
@@ -11,6 +10,7 @@ left image
 disparity map
 <img src="mboutput/CrusadeP-ent.png" width="400">
 uncertainty map (brighter->higher uncertainty)
+# Hierarchical Deep Stereo Matching on High Resolution Images
 
 ## Requirements
 - python 2.7.15
@@ -28,7 +28,7 @@ uncertainty map (brighter->higher uncertainty)
 - [SceneFlow](https://lmb.informatik.uni-freiburg.de/resources/datasets/SceneFlowDatasets.en.html)
 
 ### test
-[High-res-real-stereo (HR-RS)](https://drive.google.com/file/d/1UTkOgw5IO-GcVYapzCdzrmjbjkGMyOH4/view?usp=sharing)
+[High-res-real-stereo (HR-RS)](): comming soon
 
 ## Train
 1. Download and extract training data in folder /d/. Training data include Middlebury train set, HR-VS, KITTI-12/15 and SceneFlow.
