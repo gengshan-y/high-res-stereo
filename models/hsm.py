@@ -5,7 +5,7 @@ import torch.utils.data
 from torch.autograd import Variable
 import torch.nn.functional as F
 import math
-from submodule import *
+from .submodule import *
 import pdb
 from models.utils import unet
 from matplotlib import pyplot as plt
@@ -62,10 +62,10 @@ class HSMNet(nn.Module):
         conv40,conv30,conv20,conv10  = conv4[:nsample], conv3[:nsample], conv2[:nsample], conv1[:nsample]
         conv41,conv31,conv21,conv11  = conv4[nsample:], conv3[nsample:], conv2[nsample:], conv1[nsample:]
 
-        feat6 = self.feature_vol(conv40, conv41, self.maxdisp/64)
-        feat5 = self.feature_vol(conv30, conv31, self.maxdisp/32)
-        feat4 = self.feature_vol(conv20, conv21, self.maxdisp/16)
-        feat3 = self.feature_vol(conv10, conv11, self.maxdisp/8)
+        feat6 = self.feature_vol(conv40, conv41, self.maxdisp//64)
+        feat5 = self.feature_vol(conv30, conv31, self.maxdisp//32)
+        feat4 = self.feature_vol(conv20, conv21, self.maxdisp//16)
+        feat3 = self.feature_vol(conv10, conv11, self.maxdisp//8)
 
         feat6_2x, cost6 = self.decoder6(feat6)
         feat5 = torch.cat((feat6_2x, feat5),dim=1)

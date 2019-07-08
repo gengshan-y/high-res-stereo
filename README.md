@@ -10,8 +10,9 @@ Performance on Middlebury benchmark (y-axis: the lower the better)
 
 
 ## Requirements
-- python 2.7.15
-- pytorch 0.4.0
+- tested with python 2.7.15 and 3.6.8
+- tested with pytorch 0.4.0, 0.4.1 and 1.0.0
+- a few packages need to be installed, for eamxple, texttable
 
 ## Weights
 [Download](https://drive.google.com/file/d/1BlH7IafX-X0A5kFPd50WkZXqxo0_gtoI/view?usp=sharing)
@@ -77,3 +78,4 @@ year = {2019}
 
 ## Acknowledgement
 Part of the code is borrowed from [MiddEval-SDK](http://vision.middlebury.edu/stereo/submit3/), [PSMNet](https://github.com/JiaRenChang/PSMNet), [FlowNetPytorch](https://github.com/ClementPinard/FlowNetPytorch) and [pytorch-semseg](https://github.com/meetshah1995/pytorch-semseg).
+Thanks [SorcererX](https://github.com/SorcererX/high-res-stereo) for fixing version compatibility issues.

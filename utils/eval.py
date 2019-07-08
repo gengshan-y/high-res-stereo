@@ -78,11 +78,11 @@ def run_elas_carla(result_dir, res, img_name):
     image_suffix = img_name.split('/',4)[-1].replace('/','_').split('.')[0]
     command = 'alg-ELAS/run ./tmp0.png ./tmp1.png %d %s' % (max_disp,result_dir)
     lines = [i for i in run_command(command.split())]
-    print lines
+    print (lines)
 
     command = 'mv %s/disp0.pfm %s/%s.pfm '%(result_dir,result_dir,image_suffix)
     lines = [i for i in run_command(command.split())]
-    print lines
+    print (lines)
 
 def run_elas(eval_dir, subset,rdir, res, img_name):
 # res: resolution to upscale, not resolution compared to Full size
@@ -107,25 +107,25 @@ def run_elas(eval_dir, subset,rdir, res, img_name):
    
     command = 'alg-ELAS/run ./tmp0.png ./tmp1.png %d %s/%s%s/%s/' % (max_disp,eval_dir,subset,rdir,img_name)
     lines = [i for i in run_command(command.split())]
-    print lines
+    print (lines)
  
     command = 'mv %s/OO_OO%s/XX_XX/time.txt %s/OO_OO%s/XX_XX/timeELAS.txt'%(eval_dir,rdir,eval_dir,rdir)
     command = command.replace('XX_XX',img_name)
     command = command.replace('OO_OO',subset)
     lines = [i for i in run_command(command.split())]
-    print lines
+    print (lines)
 
     command = 'mv %s/OO_OO%s/XX_XX/disp0_s.pfm %s/OO_OO%s/XX_XX/disp0ELAS_s.pfm'%(eval_dir,rdir,eval_dir,rdir)
     command = command.replace('XX_XX',img_name)
     command = command.replace('OO_OO',subset)
     lines = [i for i in run_command(command.split())]
-    print lines
+    print (lines)
 
     command = 'mv %s/OO_OO%s/XX_XX/disp0.pfm %s/OO_OO%s/XX_XX/disp0ELAS.pfm'%(eval_dir,rdir,eval_dir,rdir)
     command = command.replace('XX_XX',img_name)
     command = command.replace('OO_OO',subset)
     lines = [i for i in run_command(command.split())]
-    print lines
+    print (lines)
 
 
 def run_sgm(eval_dir, subset, rdir,res, img_name):
@@ -157,7 +157,7 @@ def run_sgm(eval_dir, subset, rdir,res, img_name):
     totalt = time.time()-begt
     with open('%s/%s%s/%s/timeSGM.txt'%(eval_dir,subset,rdir,img_name),'w') as f:
         f.write(str(totalt))
-    print lines
+    print (lines)
   
     # save pfm
     disp = np.asarray(PIL.Image.open('%s/%s%s/%s/disp0tmp.png'%(eval_dir,subset,rdir,img_name)))[max_disp*2:-max_disp*2,max_disp*2:-max_disp*2]
@@ -170,19 +170,19 @@ def run_sgm(eval_dir, subset, rdir,res, img_name):
     command = command.replace('XX_XX',img_name)
     command = command.replace('OO_OO',subset)
     lines = [i for i in run_command(command.split())]
-    print lines
+    print (lines)
 
     command = 'rm %s/OO_OO%s/XX_XX/im0tmp.png'%(eval_dir,rdir)
     command = command.replace('XX_XX',img_name)
     command = command.replace('OO_OO',subset)
     lines = [i for i in run_command(command.split())]
-    print lines
+    print (lines)
 
     command = 'rm %s/OO_OO%s/XX_XX/im1tmp.png'%(eval_dir,rdir)
     command = command.replace('XX_XX',img_name)
     command = command.replace('OO_OO',subset)
     lines = [i for i in run_command(command.split())]
-    print lines
+    print (lines)
 
 def run_mccnn(eval_dir, subset, rdir,res, img_name):
     with open('%s/%sF/%s/calib.txt'%(eval_dir,subset,img_name)) as f:
@@ -213,11 +213,11 @@ def run_mccnn(eval_dir, subset, rdir,res, img_name):
     totalt = time.time()-begt
     with open('%s/%s%s/%s/timeMCCNN.txt'%(eval_dir,subset,rdir,img_name),'w') as f:
         f.write(str(totalt))
-    print lines
+    print (lines)
 
     command = 'luajit samples/bin2png.lua %d %d %d'%(max_disp,im.shape[0],im.shape[1])
     lines = [i for i in run_command(command.split())]
-    print lines
+    print (lines)
   
     # save pfm
     #disp = np.asarray(PIL.Image.open('disp.png'))[max_disp*2:-max_disp*2,max_disp*2:-max_disp*2]
@@ -231,13 +231,13 @@ def run_mccnn(eval_dir, subset, rdir,res, img_name):
     command = command.replace('XX_XX',img_name)
     command = command.replace('OO_OO',subset)
     lines = [i for i in run_command(command.split())]
-    print lines
+    print (lines)
 
     command = 'rm %s/OO_OO%s/XX_XX/im1tmp.png'%(eval_dir,rdir)
     command = command.replace('XX_XX',img_name)
     command = command.replace('OO_OO',subset)
     lines = [i for i in run_command(command.split())]
-    print lines
+    print (lines)
 
 '''
 Save a Numpy array to a PFM file.

@@ -48,7 +48,7 @@ class projfeat3d(nn.Module):
         b,c,d,h,w = x.size()
         x = self.conv1(x.view(b,c,d,h*w))
         x = self.bn(x)
-        x = x.view(b,-1,d/self.stride[0],h,w)
+        x = x.view(b,-1,d//self.stride[0],h,w)
         return x
 
 # original conv3d block

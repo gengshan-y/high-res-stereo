@@ -25,7 +25,7 @@ numr = (0.1450+0.1537)*3668.61736086358178
 levels = [[0,25],[25,60],[60,115],[0,115]]
 
 
-blist = np.load('%s/blist.npy'%args.gtdir)[()]
+blist = np.load('%s/blist.npy'%args.gtdir, encoding='latin1')[()]
 t = Texttable()
 t.set_deco(Texttable.HEADER)
 t.set_cols_dtype(['t','f','f','f','f','f','f'])
@@ -86,10 +86,9 @@ for level in levels:
     bad10s[-1] =    bad10s.mean()
     bad20s[-1] =    bad20s.mean()
     times[-1] =    times.mean()
-
-    t.add_rows(zip([i.split('/')[-1] for i in imgnames],avgerrs,rmss,bad5s,bad10s,bad20s,times)[-1:],header=False)
+    t.add_rows(list(zip([i.split('/')[-1] for i in imgnames],avgerrs,rmss,bad5s,bad10s,bad20s,times))[-1:],header=False)
     #t.add_rows(zip([i.split('/')[-1] for i in imgnames],avgerrs,rmss,bad5s,bad10s,bad20s,times),header=False)
 
     
 t.set_cols_align(['r','r','r','r','r','r','r'])
-print t.draw()
+print (t.draw())
