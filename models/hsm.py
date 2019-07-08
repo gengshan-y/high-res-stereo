@@ -11,9 +11,8 @@ from models.utils import unet
 from matplotlib import pyplot as plt
 
 class HSMNet(nn.Module):
-    def __init__(self, maxdisp,clean,debug=False,level=1):
+    def __init__(self, maxdisp,clean,level=1):
         super(HSMNet, self).__init__()
-        self.debug = debug
         self.maxdisp = maxdisp
         self.clean = clean
         self.feature_extraction = unet()
@@ -21,16 +20,16 @@ class HSMNet(nn.Module):
             
     
         # block 4
-        self.decoder6 = decoderBlock(6,32,32,12,up=True, pool=True)
+        self.decoder6 = decoderBlock(6,32,32,up=True, pool=True)
         if self.level > 2:
-            self.decoder5 = decoderBlock(6,32,32,12, up=False, pool=True)
+            self.decoder5 = decoderBlock(6,32,32,up=False, pool=True)
         else:
-            self.decoder5 = decoderBlock(6,32,32,12, up=True, pool=True)
+            self.decoder5 = decoderBlock(6,32,32,up=True, pool=True)
             if self.level > 1:
-                self.decoder4 = decoderBlock(6,32,32,12,  up=False)
+                self.decoder4 = decoderBlock(6,32,32, up=False)
             else:
-                self.decoder4 = decoderBlock(6,32,32,12,  up=True)
-                self.decoder3 = decoderBlock(5,32,32,12,  stride=(2,1,1),up=False, nstride=1)
+                self.decoder4 = decoderBlock(6,32,32, up=True)
+                self.decoder3 = decoderBlock(5,32,32, stride=(2,1,1),up=False, nstride=1)
         # reg
         self.disp_reg8 = disparityregression(self.maxdisp,16)
         self.disp_reg16 = disparityregression(self.maxdisp,16)

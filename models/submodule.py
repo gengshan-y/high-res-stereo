@@ -14,15 +14,14 @@ class sepConv3dBlock(nn.Module):
     Separable 3d convolution block as 2 separable convolutions and a projection
     layer
     '''
-    def __init__(self, in_planes, out_planes, depthN,stride=(1,1,1)):
+    def __init__(self, in_planes, out_planes, stride=(1,1,1)):
         super(sepConv3dBlock, self).__init__()
         if in_planes == out_planes and stride==(1,1,1):
             self.downsample = None
         else:
             self.downsample = projfeat3d(in_planes, out_planes,stride)
-        self.conv1 = sepConv3d(in_planes, out_planes, 3, stride, 1,depthN)
-        depthN = depthN/stride[0]
-        self.conv2 = sepConv3d(out_planes, out_planes, 3, (1,1,1), 1,depthN)
+        self.conv1 = sepConv3d(in_planes, out_planes, 3, stride, 1)
+        self.conv2 = sepConv3d(out_planes, out_planes, 3, (1,1,1), 1)
             
 
     def forward(self,x):
@@ -53,11 +52,11 @@ class projfeat3d(nn.Module):
         return x
 
 # original conv3d block
-def sepConv3d(in_planes, out_planes, kernel_size, stride, pad,depth,bias=False):
+def sepConv3d(in_planes, out_planes, kernel_size, stride, pad,bias=False):
     if bias:
-        return nn.Sequential(CConv3d(in_planes, out_planes, kernel_size=kernel_size, padding=pad, stride=stride,bias=bias,depth=depth))
+        return nn.Sequential(nn.Conv3d(in_planes, out_planes, kernel_size=kernel_size, padding=pad, stride=stride,bias=bias))
     else:
-        return nn.Sequential(CConv3d(in_planes, out_planes, kernel_size=kernel_size, padding=pad, stride=stride,bias=bias,depth=depth),
+        return nn.Sequential(nn.Conv3d(in_planes, out_planes, kernel_size=kernel_size, padding=pad, stride=stride,bias=bias),
                          nn.BatchNorm3d(out_planes))
         
 
@@ -86,34 +85,31 @@ class disparityregression(nn.Module):
 
 
 class decoderBlock(nn.Module):
-    def __init__(self, nconvs, inchannelF,channelF,depthN,stride=(1,1,1),up=False, nstride=1,pool=False):
+    def __init__(self, nconvs, inchannelF,channelF,stride=(1,1,1),up=False, nstride=1,pool=False):
         super(decoderBlock, self).__init__()
         self.pool=pool
         stride = [stride]*nstride + [(1,1,1)] * (nconvs-nstride)
-        self.convs = [sepConv3dBlock(inchannelF,channelF,depthN,stride=stride[0])]
-        depthN = depthN/stride[0][0]
+        self.convs = [sepConv3dBlock(inchannelF,channelF,stride=stride[0])]
         for i in range(1,nconvs):
-            self.convs.append(sepConv3dBlock(channelF,channelF,depthN, stride=stride[i]))
-            depthN = depthN/stride[i][0]
+            self.convs.append(sepConv3dBlock(channelF,channelF, stride=stride[i]))
         self.convs = nn.Sequential(*self.convs)
 
-        self.classify = nn.Sequential(sepConv3d(channelF, channelF, 3, (1,1,1), 1,depthN),
+        self.classify = nn.Sequential(sepConv3d(channelF, channelF, 3, (1,1,1), 1),
                                        nn.ReLU(inplace=True),
-                                       sepConv3d(channelF, 1, 3, (1,1,1),1,depthN,bias=True))
-                                       #CConv3d(channelF, 1, kernel_size=3, padding=1, stride=(1,1,1),bias=True))
+                                       sepConv3d(channelF, 1, 3, (1,1,1),1,bias=True))
 
         self.up = False
         if up:
             self.up = True
             self.up = nn.Sequential(nn.Upsample(scale_factor=(2,2,2),mode='trilinear'),
-                                 sepConv3d(channelF, channelF//2, 3, (1,1,1),1,depthN,bias=False),
+                                 sepConv3d(channelF, channelF//2, 3, (1,1,1),1,bias=False),
                                  nn.ReLU(inplace=True))
 
         if pool:
-            self.pool_convs = torch.nn.ModuleList([sepConv3d(channelF, channelF, 1, (1,1,1), 0,depthN),
-                               sepConv3d(channelF, channelF, 1, (1,1,1), 0,depthN),
-                               sepConv3d(channelF, channelF, 1, (1,1,1), 0,depthN),
-                               sepConv3d(channelF, channelF, 1, (1,1,1), 0,depthN)])
+            self.pool_convs = torch.nn.ModuleList([sepConv3d(channelF, channelF, 1, (1,1,1), 0),
+                               sepConv3d(channelF, channelF, 1, (1,1,1), 0),
+                               sepConv3d(channelF, channelF, 1, (1,1,1), 0),
+                               sepConv3d(channelF, channelF, 1, (1,1,1), 0)])
             
  
 
@@ -165,12 +161,3 @@ class decoderBlock(nn.Module):
                 costl = self.classify(fvl)
 
         return fvl,costl.squeeze(1)
-
-class CConv3d(nn.Conv3d):
-    def __init__(self, in_channels, out_channels, kernel_size, stride=1,
-                 padding=0, dilation=1, groups=1, bias=True,depth=0):
-        super(CConv3d,self).__init__(in_channels, out_channels, kernel_size, stride=stride,
-                 padding=padding, dilation=dilation, groups=groups, bias=bias)
-    def forward(self, input):
-        return F.conv3d(input, self.weight, self.bias, self.stride,
-                         self.padding, self.dilation, self.groups)
