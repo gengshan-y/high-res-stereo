@@ -14,3 +14,4 @@ mboutput/*.npy
 mboutput/CrusadeP/*.pfm
 mboutput/CrusadeP/*.txt
 *.zip
+run.sh

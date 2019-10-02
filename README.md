@@ -24,17 +24,18 @@ Performance on Middlebury benchmark (y-axis: the lower the better)
 - [High-res-virtual-stereo (HR-VS)](https://drive.google.com/file/d/1SgEIrH_IQTKJOToUwR1rx4-237sThUqX/view?usp=sharing)
 - [KITTI-2012&2015](http://www.cvlibs.net/datasets/kitti/eval_stereo.php)
 - [SceneFlow](https://lmb.informatik.uni-freiburg.de/resources/datasets/SceneFlowDatasets.en.html)
+- [Eth3D](https://www.eth3d.net/datasets#low-res-two-view-training-data)
 
 ### test
 [High-res-real-stereo (HR-RS)](): comming soon
 
 ## Train
-1. Download and extract training data in folder /d/. Training data include Middlebury train set, HR-VS, KITTI-12/15 and SceneFlow.
+1. Download and extract training data in folder /d/. Training data include Middlebury train set, HR-VS, KITTI-12/15, ETH3D, and SceneFlow.
 2. Run
 ```
-CUDA_VISIBLE_DEVICES=0,1,2,3 python train.py --maxdisp 384 --batchsize 24 --database /d/ --logname log1 --savemodel /somewhere/  --epochs 10
+CUDA_VISIBLE_DEVICES=0,1,2,3 python train.py --maxdisp 384 --batchsize 28 --database /d/ --logname log1 --savemodel /somewhere/  --epochs 10
 ```
-3. Evalute on Middlebury additional images and KITTI validation set. After 10 epochs, average error on Middlebury *additional* images with half-res should be around 4.6 (excluding Shopvac).
+3. Evalute on Middlebury additional images and KITTI validation set. After 40k iterations, average error on Middlebury *additional* images with half-res should be around 5.7 (excluding Shopvac).
 
 ## Inference
 Example:
@@ -42,7 +43,13 @@ Example:
 CUDA_VISIBLE_DEVICES=3 python submission.py --datapath ./data-mbtest/   --outdir ./mboutput --loadmodel ./weights/final-768px.tar  --testres 1 --clean 0.8 --max_disp -1
 ```
 
-Evaluation:
+Evaluate on Middlebury additional images:
+```
+CUDA_VISIBLE_DEVICES=3 python submission.py --datapath ./path_to_additional_images   --outdir ./output --loadmodel ./weights/final-768px.tar  --testres 0.5
+python eval_mb.py --indir ./output --gtdir ./groundtruth_path
+```
+
+Evaluate on HRRS:
 ```
 CUDA_VISIBLE_DEVICES=3 python submission.py --datapath ./data-HRRS/   --outdir ./output --loadmodel ./weights/final-768px.tar  --testres 0.5
 python eval_disp.py --indir ./output --gtdir ./data-HRRS/
