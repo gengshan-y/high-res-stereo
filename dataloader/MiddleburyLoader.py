@@ -3,7 +3,7 @@ from PIL import Image
 import numpy as np
 from utils import preprocess
 from utils import readpfm as rp
-import flow_transforms
+from . import flow_transforms
 import pdb
 import torchvision
 import warnings
@@ -32,7 +32,7 @@ def disparity_loader(path):
 
 class myImageFloder(data.Dataset):
 
-    def __init__(self, left, right, left_disparity, right_disparity=None, loader=default_loader, dploader=disparity_loader, rand_scale=[0.225,0.6], order=0):
+    def __init__(self, left, right, left_disparity, right_disparity=None, loader=default_loader, dploader=disparity_loader, rand_scale=[0.225,0.6], rand_bright=[0.5,2.], order=0):
         self.left = left
         self.right = right
         self.disp_L = left_disparity
@@ -40,6 +40,7 @@ class myImageFloder(data.Dataset):
         self.loader = loader
         self.dploader = dploader
         self.rand_scale = rand_scale
+        self.rand_bright = rand_bright
         self.order = order
         
 
@@ -61,7 +62,7 @@ class myImageFloder(data.Dataset):
         max_w = 3072//4
 
         # photometric unsymmetric-augmentation
-        random_brightness = np.random.uniform(0.5, 2.,2)
+        random_brightness = np.random.uniform(self.rand_bright[0], self.rand_bright[1],2)
         random_gamma = np.random.uniform(0.8, 1.2,2)
         random_contrast = np.random.uniform(0.8, 1.2,2)
         left_img = torchvision.transforms.functional.adjust_brightness(left_img, random_brightness[0])

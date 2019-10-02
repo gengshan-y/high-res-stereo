@@ -26,7 +26,7 @@ parser.add_argument('--database', default='/ssd//',
                     help='data path')
 parser.add_argument('--epochs', type=int, default=10,
                     help='number of epochs to train')
-parser.add_argument('--batchsize', type=int, default=24,
+parser.add_argument('--batchsize', type=int, default=28,
                     help='samples per batch')
 parser.add_argument('--loadmodel', default=None,
                     help='weights path')
@@ -67,15 +67,15 @@ from dataloader import MiddleburyLoader as DA
 batch_size = args.batchsize
 scale_factor = args.maxdisp / 384. # controls training resolution
 all_left_img, all_right_img, all_left_disp, all_right_disp = ls.dataloader('%s/carla-highres/trainingF'%args.database)
-loader_carla = DA.myImageFloder(all_left_img,all_right_img,all_left_disp,right_disparity=all_right_disp, rand_scale=[0.225,0.6*scale_factor], order=2)
+loader_carla = DA.myImageFloder(all_left_img,all_right_img,all_left_disp,right_disparity=all_right_disp, rand_scale=[0.225,0.6*scale_factor], rand_bright=[0.8,1.2],order=2)
 
 all_left_img, all_right_img, all_left_disp, all_right_disp = ls.dataloader('%s/mb-ex-training/trainingF'%args.database)  # mb-ex
-loader_mb = DA.myImageFloder(all_left_img,all_right_img,all_left_disp,right_disparity=all_right_disp, rand_scale=[0.225,0.6*scale_factor], order=0)
+loader_mb = DA.myImageFloder(all_left_img,all_right_img,all_left_disp,right_disparity=all_right_disp, rand_scale=[0.225,0.6*scale_factor], rand_bright=[0.8,1.2],order=0)
 
 all_left_img, all_right_img, all_left_disp, all_right_disp = lt.dataloader('%s/sceneflow/'%args.database)
 loader_scene = DA.myImageFloder(all_left_img,all_right_img,all_left_disp,right_disparity=all_right_disp, rand_scale=[0.9,2.4*scale_factor], order=2)
 
-all_left_img, all_right_img, all_left_disp,_,_,_ = lk15.dataloader('%s/kitti_scene/training/'%args.database,typ='train') # trainval
+all_left_img, all_right_img, all_left_disp,_,_,_ = lk15.dataloader('%s/kitti_scene/training/'%args.database,typ='train') # change to trainval when finetuning on KITTI
 loader_kitti15 = DA.myImageFloder(all_left_img,all_right_img,all_left_disp, rand_scale=[0.9,2.4*scale_factor], order=0)
 all_left_img, all_right_img, all_left_disp = lk12.dataloader('%s/data_stereo_flow/training/'%args.database)
 loader_kitti12 = DA.myImageFloder(all_left_img,all_right_img,all_left_disp, rand_scale=[0.9,2.4*scale_factor], order=0)
