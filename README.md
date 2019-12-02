@@ -35,7 +35,7 @@ Performance on Middlebury benchmark (y-axis: the lower the better)
 ```
 CUDA_VISIBLE_DEVICES=0,1,2,3 python train.py --maxdisp 384 --batchsize 28 --database /d/ --logname log1 --savemodel /somewhere/  --epochs 10
 ```
-3. Evalute on Middlebury additional images and KITTI validation set. After 40k iterations, average error on Middlebury *additional* images with half-res should be around 5.7 (excluding Shopvac).
+3. Evalute on Middlebury additional images and KITTI validation set. After 40k iterations, average error on Middlebury *additional* images excluding Shopvac (perfect+imperfect, 24 stereo pairs in total) with half-res should be around 5.7.
 
 ## Inference
 Example:
