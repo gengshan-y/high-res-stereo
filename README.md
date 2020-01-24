@@ -15,7 +15,8 @@ Performance on Middlebury benchmark (y-axis: the lower the better)
 - a few packages need to be installed, for eamxple, texttable
 
 ## Weights
-[Download](https://drive.google.com/file/d/1BlH7IafX-X0A5kFPd50WkZXqxo0_gtoI/view?usp=sharing)
+[Google drive](https://drive.google.com/file/d/1BlH7IafX-X0A5kFPd50WkZXqxo0_gtoI/view?usp=sharing)
+[Backup link](http://www.contrib.andrew.cmu.edu/~gengshay/wordpress/wp-content/uploads/2020/01/final-768px.tar)
 
 ## Data
 
