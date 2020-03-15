@@ -25,6 +25,7 @@ Able to handle large view variation of high-res images (as a submodule in [Open4
 
 [Backup link](http://www.contrib.andrew.cmu.edu/~gengshay/wordpress/wp-content/uploads/2020/01/final-768px.tar)
 
+Note: The .tar file can be directly loaded in pytorch. No need to uncompress it.
 
 ## Inference
 Test on CrusadeP and dancing stereo pairs:
