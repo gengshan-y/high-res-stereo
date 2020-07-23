@@ -21,9 +21,10 @@ Able to handle large view variation of high-res images (as a submodule in [Open4
 - a few packages need to be installed, for eamxple, texttable
 
 ## Weights
-[Google drive](https://drive.google.com/file/d/1BlH7IafX-X0A5kFPd50WkZXqxo0_gtoI/view?usp=sharing)
 
-[Backup link](http://www.contrib.andrew.cmu.edu/~gengshay/wordpress/wp-content/uploads/2020/01/final-768px.tar)
+- [Middlebury model (more robust)](http://www.contrib.andrew.cmu.edu/~gengshay/wordpress/wp-content/uploads/2020/01/final-768px.tar)
+- [KITTI model (specified to KITTI)](http://www.contrib.andrew.cmu.edu/~gengshay/wordpress/wp-content/uploads/2020/01/kitti.tar)
+- [Google drive (backup link)](https://drive.google.com/file/d/1BlH7IafX-X0A5kFPd50WkZXqxo0_gtoI/view?usp=sharing)
 
 Note: The .tar file can be directly loaded in pytorch. No need to uncompress it.
 
