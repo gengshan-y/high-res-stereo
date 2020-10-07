@@ -1,3 +1,9 @@
+**/.vscode/*
+**/.idea/*
+
+**/model/*
+**/data/*
+
 __pycache__/
 *.lprof
 *.pyc

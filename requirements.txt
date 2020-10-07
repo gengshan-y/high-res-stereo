@@ -1,0 +1,7 @@
+opencv-python-headless==4.4.0.44
+matplotlib==3.3.2
+numpy==1.19.1
+scipy==1.5.2
+tensorflow==1.15.3
+torch==1.6.0
+torchvision==0.7.0

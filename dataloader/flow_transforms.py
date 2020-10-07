@@ -16,9 +16,8 @@ class Compose(object):
 
     def __call__(self, input, target):
         for t in self.co_transforms:
-            input,target = t(input,target)
-        return input,target
-
+            input, target = t(input, target)
+        return input, target
 
 
 class Scale(object):
@@ -28,20 +27,20 @@ class Scale(object):
     def __init__(self, size, order=2):
         self.ratio = size
         self.order = order
-        if order==0:
-            self.code=cv2.INTER_NEAREST
-        elif order==1:
-            self.code=cv2.INTER_LINEAR
-        elif order==2:
-            self.code=cv2.INTER_CUBIC
+        if order == 0:
+            self.code = cv2.INTER_NEAREST
+        elif order == 1:
+            self.code = cv2.INTER_LINEAR
+        elif order == 2:
+            self.code = cv2.INTER_CUBIC
 
     def __call__(self, inputs, target):
         h, w, _ = inputs[0].shape
         ratio = self.ratio
 
-        inputs[0] = cv2.resize(inputs[0], None, fx=ratio,fy=ratio,interpolation=cv2.INTER_CUBIC)
-        inputs[1] = cv2.resize(inputs[1], None, fx=ratio,fy=ratio,interpolation=cv2.INTER_CUBIC)
-        target = cv2.resize(target, None, fx=ratio,fy=ratio,interpolation=self.code) * ratio
+        inputs[0] = cv2.resize(inputs[0], None, fx=ratio, fy=ratio, interpolation=cv2.INTER_CUBIC)
+        inputs[1] = cv2.resize(inputs[1], None, fx=ratio, fy=ratio, interpolation=cv2.INTER_CUBIC)
+        target = cv2.resize(target, None, fx=ratio, fy=ratio, interpolation=self.code) * ratio
 
         return inputs, target
 
@@ -56,17 +55,19 @@ class RandomCrop(object):
         else:
             self.size = size
 
-    def __call__(self, inputs,target):
+    def __call__(self, inputs, target):
         h, w, _ = inputs[0].shape
         th, tw = self.size
-        if w < tw: tw=w
-        if h < th: th=h
+        if w < tw:
+            tw = w
+        if h < th:
+            th = h
 
         x1 = random.randint(0, w - tw)
         y1 = random.randint(0, h - th)
-        inputs[0] = inputs[0][y1: y1 + th,x1: x1 + tw]
-        inputs[1] = inputs[1][y1: y1 + th,x1: x1 + tw]
-        return inputs, target[y1: y1 + th,x1: x1 + tw]
+        inputs[0] = inputs[0][y1: y1 + th, x1: x1 + tw]
+        inputs[1] = inputs[1][y1: y1 + th, x1: x1 + tw]
+        return inputs, target[y1: y1 + th, x1: x1 + tw]
 
 
 class RandomVdisp(object):
@@ -80,14 +81,14 @@ class RandomVdisp(object):
         self.diff_angle = diff_angle
         self.px = px
 
-    def __call__(self, inputs,target):
-        px2 = random.uniform(-self.px,self.px)
-        angle2 = random.uniform(-self.angle,self.angle)
+    def __call__(self, inputs, target):
+        px2 = random.uniform(-self.px, self.px)
+        angle2 = random.uniform(-self.angle, self.angle)
 
-        image_center = (np.random.uniform(0,inputs[1].shape[0]),\
-                             np.random.uniform(0,inputs[1].shape[1]))
+        image_center = (np.random.uniform(0, inputs[1].shape[0]),
+                        np.random.uniform(0, inputs[1].shape[1]))
         rot_mat = cv2.getRotationMatrix2D(image_center, angle2, 1.0)
         inputs[1] = cv2.warpAffine(inputs[1], rot_mat, inputs[1].shape[1::-1], flags=cv2.INTER_LINEAR)
-        trans_mat = np.float32([[1,0,0],[0,1,px2]])
+        trans_mat = np.float32([[1, 0, 0], [0, 1, px2]])
         inputs[1] = cv2.warpAffine(inputs[1], trans_mat, inputs[1].shape[1::-1], flags=cv2.INTER_LINEAR)
-        return inputs,target
+        return inputs, target
