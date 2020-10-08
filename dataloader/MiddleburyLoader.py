@@ -62,12 +62,12 @@ class myImageFloder(data.Dataset):
         right_img = self.loader(right)
         disp_L = self.disp_L[index]
         dataL = self.dploader(disp_L, self.flip_disp_ud)
-        dataL[dataL == np.inf] = 0
+        dataL[~np.isfinite(dataL)] = 0
 
         if not (self.disp_R is None):
             disp_R = self.disp_R[index]
             dataR = self.dploader(disp_R, self.flip_disp_ud)
-            dataR[dataR == np.inf] = 0
+            dataR[~np.isfinite(dataR)] = 0
 
         max_h = 2048 // 4
         max_w = 3072 // 4
