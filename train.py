@@ -18,7 +18,7 @@ from dataloader import KITTIloader2015 as lk15
 from dataloader import MiddleburyLoader as DA
 from dataloader import listfiles as ls
 from dataloader import listsceneflow as lt
-from dataloader import list_lidar_hdsm_dataset as lidar
+from dataloader.listfiles import lidar_dataloader
 from models import hsm
 from utils import logger
 from utils import sync_dataset, persist_saved_models
@@ -97,16 +97,17 @@ def init_dataloader(input_args):
     all_left_img, all_right_img, all_left_disp, _ = ls.dataloader('%s/eth3d/' % input_args.database)
     loader_eth3d = DA.myImageFloder(all_left_img, all_right_img, all_left_disp, rand_scale=rand_scale, order=0)
 
-    all_left_img, all_right_img, all_left_disp, all_right_disp = lidar.dataloader('%s/lidar-hdsm-dataset/' %input_args.database)
+    all_left_img, all_right_img, all_left_disp, all_right_disp = lidar_dataloader('%s/lidar-hdsm-dataset/' %input_args.database)
     loader_lidar = DA.myImageFloder(all_left_img, all_right_img, all_left_disp, right_disparity=all_right_disp, rand_scale=[0.5, 1.1*scale_factor], order=2)
 
-    data_inuse = torch.utils.data.ConcatDataset([loader_carla] * 40 +
-                                                [loader_mb] * 500 +
-                                                [loader_scene] +
+    data_inuse = torch.utils.data.ConcatDataset([loader_carla] * 10 +
+                                                [loader_mb] * 150 + # 71 pairs
+                                                [loader_scene] +  # 39K pairs 960x540
                                                 [loader_kitti15] +
-                                                [loader_kitti12] * 80 +
-                                                [loader_eth3d] * 1000 +
-                                                [loader_lidar] * 3)
+                                                [loader_kitti12] * 24 +
+                                                [loader_eth3d] * 300 +
+                                                [loader_lidar] ) # 25K pairs
+                                                                 # airsim ~750
     train_dataloader = torch.utils.data.DataLoader(data_inuse, batch_size=batch_size, shuffle=True,
                                                    num_workers=batch_size, drop_last=True, worker_init_fn=_init_fn)
     print('%d batches per epoch' % (len(data_inuse) // batch_size))
@@ -160,6 +161,7 @@ def main():
     if not input_args.no_sync_dataset:
         print('===== Syncing dataset =====')
         sync_dataset(input_args.database)
+        print('===== Data synced =========')
 
     hdsm_model, optimizer = load_model(input_args)
 
