@@ -42,8 +42,6 @@ def visualize_random_pixel_pairs(left, right, disp_left, sample=4):
             y = np.random.randint(0, disp_left.shape[0], 1)
             x = np.random.randint(0, disp_left.shape[1], 1)
             disp = disp_left[y, x]
-            print(disp)
-
         cv2.circle(left, (x, y), 10, [255, 0, 0])
         cv2.circle(right, (int(x - disp), y), 10, [0, 255, 0])
         cv2.circle(right, (x, y), 10, [0, 0, 255])
