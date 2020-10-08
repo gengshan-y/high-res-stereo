@@ -43,7 +43,7 @@ def sync_lidar_dataset(dataset_dir):
     for region, subregions in regions.items():
         tlds.extend(['{}-{}'.format(region, subregion) for subregion in subregions])
 
-    commands = [f'aws s3 sync "s3://{bucket_name}/lidar-hdsm-dataset/{tld}" "{target_dir}/{tld}"' for tld in tlds]
+    commands = [f'aws s3 sync "s3://{bucket_name}/lidar-hdsm-dataset/{tld}" "{target_dir}/{tld}" --quiet' for tld in tlds]
     with ThreadPoolExecutor(os.cpu_count() // 2) as executor:
         executor.map(os.system, commands)
 
