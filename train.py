@@ -18,6 +18,7 @@ from dataloader import KITTIloader2015 as lk15
 from dataloader import MiddleburyLoader as DA
 from dataloader import listfiles as ls
 from dataloader import listsceneflow as lt
+from dataloader import list_lidar_hdsm_dataset as lidar
 from models import hsm
 from utils import logger
 from utils import sync_dataset, persist_saved_models
@@ -96,12 +97,16 @@ def init_dataloader(input_args):
     all_left_img, all_right_img, all_left_disp, _ = ls.dataloader('%s/eth3d/' % input_args.database)
     loader_eth3d = DA.myImageFloder(all_left_img, all_right_img, all_left_disp, rand_scale=rand_scale, order=0)
 
+    all_left_img, all_right_img, all_left_disp, all_right_disp = lidar.dataloader('%s/lidar-hdsm-dataset/' %input_args.database)
+    loader_lidar = DA.myImageFloder(all_left_img, all_right_img, all_left_disp, right_disparity=all_right_disp, rand_scale=[0.5, 1.1*scale_factor], order=2)
+
     data_inuse = torch.utils.data.ConcatDataset([loader_carla] * 40 +
                                                 [loader_mb] * 500 +
                                                 [loader_scene] +
                                                 [loader_kitti15] +
                                                 [loader_kitti12] * 80 +
-                                                [loader_eth3d] * 1000)
+                                                [loader_eth3d] * 1000 +
+                                                [loader_lidar] * 3)
     train_dataloader = torch.utils.data.DataLoader(data_inuse, batch_size=batch_size, shuffle=True,
                                                    num_workers=batch_size, drop_last=True, worker_init_fn=_init_fn)
     print('%d batches per epoch' % (len(data_inuse) // batch_size))
