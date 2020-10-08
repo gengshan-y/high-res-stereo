@@ -1,5 +1,3 @@
-import torch.utils.data as data
-from PIL import Image
 import warnings
 
 import numpy as np
@@ -53,6 +51,7 @@ class myImageFloder(data.Dataset):
         self.rand_scale = rand_scale
         self.rand_bright = rand_bright
         self.order = order
+        self.occlusion_size = occlusion_size
         self.flip_disp_ud = flip_disp_ud
 
     def __getitem__(self, index):
@@ -63,6 +62,7 @@ class myImageFloder(data.Dataset):
         disp_L = self.disp_L[index]
         dataL = self.dploader(disp_L, self.flip_disp_ud)
         dataL[~np.isfinite(dataL)] = 0
+        disp_R = None
 
         if not (self.disp_R is None):
             disp_R = self.disp_R[index]
@@ -86,13 +86,12 @@ class myImageFloder(data.Dataset):
         left_img = np.asarray(left_img)
 
         # horizontal flip
-        if not (self.disp_R is None):
+        if not (disp_R is None):
             if np.random.binomial(1, 0.5):
                 tmp = right_img
                 right_img = left_img[:, ::-1]
                 left_img = tmp[:, ::-1]
                 tmp = dataR
-                dataR = dataL[:, ::-1]
                 dataL = tmp[:, ::-1]
 
         # geometric unsymmetric-augmentation
@@ -112,8 +111,8 @@ class myImageFloder(data.Dataset):
 
         # randomly occlude a region
         if np.random.binomial(1, 0.5):
-            sx = int(np.random.uniform(50, 150))
-            sy = int(np.random.uniform(50, 150))
+            sx = int(np.random.uniform(self.occlusion_size[0], self.occlusion_size[1]))
+            sy = int(np.random.uniform(self.occlusion_size[0], self.occlusion_size[1]))
             cx = int(np.random.uniform(sx, right_img.shape[0] - sx))
             cy = int(np.random.uniform(sy, right_img.shape[1] - sy))
             right_img[cx - sx:cx + sx, cy - sy:cy + sy] = np.mean(np.mean(right_img, 0), 0)[np.newaxis, np.newaxis]
