@@ -38,10 +38,11 @@ def disparity_loader(path, flip_disp=False):
 
 
 class myImageFloder(data.Dataset):
-
     def __init__(self, left, right, left_disparity, right_disparity=None, loader=default_loader,
                  dploader=disparity_loader, rand_scale=[0.225, 0.6], rand_bright=[0.5, 2.], order=0,
-                 flip_disp_ud=False):
+                 flip_disp_ud=False, occlusion_size=None):
+        if occlusion_size is None:
+            occlusion_size = [50, 150]
         self.left = left
         self.right = right
         self.disp_L = left_disparity
