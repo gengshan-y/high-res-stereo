@@ -1,14 +1,16 @@
-import os
-import torch
 import torch.utils.data as data
 from PIL import Image
+import warnings
+
 import numpy as np
+import torch.utils.data as data
+import torchvision
+from PIL import Image
+
 from utils import preprocess
 from utils import readpfm as rp
 from . import flow_transforms
-import pdb
-import torchvision
-import warnings
+
 warnings.filterwarnings('ignore', '.*output shape of zoom.*')
 
 IMG_EXTENSIONS = [
@@ -24,20 +26,24 @@ def default_loader(path):
     return Image.open(path).convert('RGB')
 
 
-def disparity_loader(path):
+def disparity_loader(path, flip_disp=False):
     if '.png' in path:
         data = Image.open(path)
-        data = np.ascontiguousarray(data, dtype=np.float32)/256
-        return data
+        data = np.ascontiguousarray(data, dtype=np.float32) / 256
     elif '.npy' in path:
-        return np.load(path)
+        data = np.load(path)
     else:
-        return rp.readPFM(path)[0]
+        data = rp.readPFM(path)[0]
+    if flip_disp:
+        data = np.flipud(data)
+    return data
 
 
 class myImageFloder(data.Dataset):
 
-    def __init__(self, left, right, left_disparity, right_disparity=None, loader=default_loader, dploader=disparity_loader, rand_scale=[0.225, 0.6], rand_bright=[0.5, 2.], order=0):
+    def __init__(self, left, right, left_disparity, right_disparity=None, loader=default_loader,
+                 dploader=disparity_loader, rand_scale=[0.225, 0.6], rand_bright=[0.5, 2.], order=0,
+                 flip_disp_ud=False):
         self.left = left
         self.right = right
         self.disp_L = left_disparity
@@ -47,6 +53,7 @@ class myImageFloder(data.Dataset):
         self.rand_scale = rand_scale
         self.rand_bright = rand_bright
         self.order = order
+        self.flip_disp_ud = flip_disp_ud
 
     def __getitem__(self, index):
         left = self.left[index]
@@ -54,16 +61,16 @@ class myImageFloder(data.Dataset):
         left_img = self.loader(left)
         right_img = self.loader(right)
         disp_L = self.disp_L[index]
-        dataL = self.dploader(disp_L)
-        dataL[dataL == np.inf] = 0
+        dataL = self.dploader(disp_L, self.flip_disp_ud)
+        dataL[~np.isfinite(dataL)] = 0
 
         if not (self.disp_R is None):
             disp_R = self.disp_R[index]
-            dataR = self.dploader(disp_R)
-            dataR[dataR == np.inf] = 0
+            dataR = self.dploader(disp_R, self.flip_disp_ud)
+            dataR[~np.isfinite(dataR)] = 0
 
-        max_h = 2048//4
-        max_w = 3072//4
+        max_h = 2048 // 4
+        max_w = 3072 // 4
 
         # photometric unsymmetric-augmentation
         random_brightness = np.random.uniform(self.rand_bright[0], self.rand_bright[1], 2)
@@ -107,9 +114,9 @@ class myImageFloder(data.Dataset):
         if np.random.binomial(1, 0.5):
             sx = int(np.random.uniform(50, 150))
             sy = int(np.random.uniform(50, 150))
-            cx = int(np.random.uniform(sx, right_img.shape[0]-sx))
-            cy = int(np.random.uniform(sy, right_img.shape[1]-sy))
-            right_img[cx-sx:cx+sx, cy-sy:cy+sy] = np.mean(np.mean(right_img, 0), 0)[np.newaxis, np.newaxis]
+            cx = int(np.random.uniform(sx, right_img.shape[0] - sx))
+            cy = int(np.random.uniform(sy, right_img.shape[1] - sy))
+            right_img[cx - sx:cx + sx, cy - sy:cy + sy] = np.mean(np.mean(right_img, 0), 0)[np.newaxis, np.newaxis]
 
         h, w, _ = left_img.shape
         top_pad = max_h - h
