@@ -98,7 +98,9 @@ def init_dataloader(input_args):
     loader_eth3d = DA.myImageFloder(all_left_img, all_right_img, all_left_disp, rand_scale=rand_scale, order=0)
 
     all_left_img, all_right_img, all_left_disp, all_right_disp = lidar_dataloader('%s/lidar-hdsm-dataset/' %input_args.database)
-    loader_lidar = DA.myImageFloder(all_left_img, all_right_img, all_left_disp, right_disparity=all_right_disp, rand_scale=[0.5, 1.1*scale_factor], order=2)
+    loader_lidar = DA.myImageFloder(all_left_img, all_right_img, all_left_disp, right_disparity=all_right_disp,
+                                    rand_scale=[0.5, 1.1*scale_factor], order=2, flip_disp_ud=True,
+                                    occlusion_size=[10, 25])
 
     data_inuse = torch.utils.data.ConcatDataset([loader_carla] * 10 +
                                                 [loader_mb] * 150 + # 71 pairs
