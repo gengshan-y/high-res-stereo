@@ -3,7 +3,8 @@ import numpy as np
 import torch
 
 __imagenet_stats = {'mean': [0.485, 0.456, 0.406],
-                   'std': [0.229, 0.224, 0.225]}
+                    'std': [0.229, 0.224, 0.225]}
+
 
 class toTensorLegacy(object):
     def __call__(self, pic):
@@ -14,11 +15,12 @@ class toTensorLegacy(object):
         Returns:
             Tensor: Converted image.
         """
-        if isinstance( pic, np.ndarray ):
-                # This is what TorchVision 0.2.0 returns for transforms.toTensor() for np.ndarray
-        	return torch.from_numpy( pic.transpose((2, 0, 1))).float().div(255)
+        if isinstance(pic, np.ndarray):
+            # This is what TorchVision 0.2.0 returns for transforms.toTensor() for np.ndarray
+            return torch.from_numpy(pic.transpose((2, 0, 1))).float().div(255)
         else:
-                return transforms.to_tensor( pic )
+            return transforms.to_tensor(pic)
+
     def __repr__(self):
         return self.__class__.__name__ + '()'
 
@@ -29,4 +31,13 @@ def get_transform():
         transforms.Normalize(**__imagenet_stats),
     ]
 
+    return transforms.Compose(t_list)
+
+
+def get_inv_transform():
+    mean = torch.tensor(__imagenet_stats['mean'], dtype=torch.float32)
+    std = torch.tensor(__imagenet_stats['std'], dtype=torch.float32)
+    t_list = [
+        transforms.Normalize((-mean / std).tolist(), (1.0 / std).tolist())
+    ]
     return transforms.Compose(t_list)

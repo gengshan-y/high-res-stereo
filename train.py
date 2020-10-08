@@ -153,6 +153,7 @@ def main():
     if not input_args.no_sync_dataset:
         print('===== Syncing dataset =====')
         sync_dataset(input_args.database)
+    # TODO sync from s3 models/logs
 
     hdsm_model, optimizer = load_model(input_args)
 
@@ -195,6 +196,7 @@ def main():
                            save_filename)
 
         log.scalar_summary('train/loss', total_train_loss / len(train_img_loader), epoch)
+        # TODO - Sync model and logs to s3
         torch.cuda.empty_cache()
 
 
