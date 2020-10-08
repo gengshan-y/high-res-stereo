@@ -32,18 +32,19 @@ def sync_lidar_dataset(dataset_dir):
 
     # sync all the regions in parallel
     regions = {
-        'Demo-Dallas': [1,2,3],
-        'Demo-LA-River': [1,2,3],
-        'Demo-Manchester': [1,2,3],
+        'Demo-Dallas': [1, 2, 3],
+        'Demo-LA-River': [1, 2, 3],
+        'Demo-Manchester': [1, 2, 3],
         'Demo-Richmond': list(range(1, 14)),
-        'Demo-Seattle': [1,2,3],
+        'Demo-Seattle': [1, 2, 3],
     }
 
     tlds = []
     for region, subregions in regions.items():
         tlds.extend(['{}-{}'.format(region, subregion) for subregion in subregions])
 
-    commands = [f'aws s3 sync "s3://{bucket_name}/lidar-hdsm-dataset/{tld}" "{target_dir}/{tld}" --quiet' for tld in tlds]
+    commands = [f'aws s3 sync "s3://{bucket_name}/lidar-hdsm-dataset/{tld}" "{target_dir}/{tld}" --quiet' for tld in
+                tlds]
     with ThreadPoolExecutor(os.cpu_count() // 2) as executor:
         executor.map(os.system, commands)
 
@@ -52,8 +53,9 @@ def sync_lidar_dataset(dataset_dir):
     for path, subdirs, files in os.walk(dataset_dir):
         files = [f for f in files if f]
         for name in files:
-            all_files.append(os.path.join(path, name).replace("\\","/"))
-    train_set = set([os.path.dirname(f).replace(f'{target_dir}/', '') for f in all_files if os.path.basename(f) == 'im0.png'])
+            all_files.append(os.path.join(path, name).replace("\\", "/"))
+    train_set = set(
+        [os.path.dirname(f).replace(f'{target_dir}/', '') for f in all_files if os.path.basename(f) == 'im0.png'])
     with open(val_file) as f:
         val_set = set([line.replace('s3://autogpe-datasets/lidar-hdsm-dataset/', '').strip() for line in f.readlines()])
 
@@ -82,3 +84,8 @@ def sync_open_dataset_small(dataset_dir):
     print(command)
     os.system(command)
     print('===== Finished hdsm_small dataset sync =====')
+
+
+def persist_saved_models(experiment_name, model_dir):
+    command = f'aws s3 sync "{model_dir}" "s3://autogpe-model-training/high-res-stereo/{experiment_name}" --quiet'
+    os.system(command)

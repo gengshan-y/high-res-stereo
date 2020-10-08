@@ -6,3 +6,4 @@ tensorflow==1.15.3
 torch==1.6.0
 torchvision==0.7.0
 boto3==1.15.14
+texttable==1.6.3

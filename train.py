@@ -20,7 +20,7 @@ from dataloader import listfiles as ls
 from dataloader import listsceneflow as lt
 from models import hsm
 from utils import logger
-from utils import sync_dataset
+from utils import sync_dataset, persist_saved_models
 
 torch.backends.cudnn.benchmark = True
 
@@ -36,6 +36,8 @@ def parse_args():
     parser.add_argument('--savemodel', default='./model', help='save path')
     parser.add_argument('--seed', type=int, default=1, metavar='S', help='random seed (default: 1)')
     parser.add_argument('--no-sync-dataset', action='store_true', help='Do not sync the dataset files')
+    parser.add_argument('--persist_to_s3', action='store_true', help='Sync the output models to s3')
+    parser.add_argument('--experiment_name', type=str, default='default', help='experiment name when persisting model to s3')
     args = parser.parse_args()
     return args
 
@@ -193,6 +195,10 @@ def main():
                             'state_dict': hdsm_model.state_dict(),
                             'train_loss': total_train_loss / len(train_img_loader)},
                            save_filename)
+
+                if input_args.persist_to_s3:
+                    persist_saved_models(input_args.experiment_name, input_args.savemodel)
+
 
         log.scalar_summary('train/loss', total_train_loss / len(train_img_loader), epoch)
         torch.cuda.empty_cache()
