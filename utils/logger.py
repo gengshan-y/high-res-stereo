@@ -7,15 +7,18 @@ Github: https://github.com/senthilps8
 Description: 
 """
 
-import tensorflow as tf
+
+from tensorboard.compat.proto.summary_pb2 import HistogramProto
+from torch.utils.tensorboard.writer import FileWriter
+from torch.utils.tensorboard.summary import Summary
+import torch
 from torch.autograd import Variable
 import numpy as np
-import scipy.misc
+from PIL import Image
 import os
-try:
-    from StringIO import StringIO  # Python 2.7
-except ImportError:
-    from io import BytesIO         # Python 3.x
+import cv2
+from io import BytesIO
+from utils.preprocess import get_inv_transform
 
 
 class Logger(object):
@@ -30,37 +33,41 @@ class Logger(object):
                 os.makedirs(os.path.join(log_dir, name))
             except:
                 pass
-            self.writer = tf.summary.FileWriter(os.path.join(log_dir, name),
+            self.writer = FileWriter(os.path.join(log_dir, name),
                                                 filename_suffix=name)
         else:
-            self.writer = tf.summary.FileWriter(log_dir, filename_suffix=name)
+            self.writer = FileWriter(log_dir, filename_suffix=name)
 
     def scalar_summary(self, tag, value, step):
         """Log a scalar variable."""
-        summary = tf.Summary(value=[tf.Summary.Value(tag=tag, simple_value=value)])
+        summary = Summary(value=[Summary.Value(tag=tag, simple_value=value)])
         self.writer.add_summary(summary, step)
 
-    def image_summary(self, tag, images, step):
+    def image_summary(self, tag, images, step, is_image=False):
         """Log a list of images."""
 
+        t_inv = get_inv_transform()
         img_summaries = []
         for i, img in enumerate(images):
             # Write the image to a string
-            try:
-                s = StringIO()
-            except:
-                s = BytesIO()
-            scipy.misc.toimage(img).save(s, format="png")
+            s = BytesIO()
+            if is_image:
+                im = t_inv(img).numpy().transpose(1,2,0).astype(np.uint8)
+            else:
+                im = img if isinstance(img, np.ndarray) else img.numpy()
+                im = cv2.normalize(im,None, 0, 255, norm_type=cv2.NORM_MINMAX).astype(np.uint8)
+            im = Image.fromarray(im)
+            im.save(s, format="PNG")
 
             # Create an Image object
-            img_sum = tf.Summary.Image(encoded_image_string=s.getvalue(),
+            img_sum = Summary.Image(encoded_image_string=s.getvalue(),
                                        height=img.shape[0],
                                        width=img.shape[1])
             # Create a Summary value
-            img_summaries.append(tf.Summary.Value(tag='%s/%d' % (tag, i), image=img_sum))
+            img_summaries.append(Summary.Value(tag='%s/%d' % (tag, i), image=img_sum))
 
         # Create and write Summary
-        summary = tf.Summary(value=img_summaries)
+        summary = Summary(value=img_summaries)
         self.writer.add_summary(summary, step)
 
     def histo_summary(self, tag, values, step, bins=1000):
@@ -70,7 +77,7 @@ class Logger(object):
         counts, bin_edges = np.histogram(values, bins=bins)
 
         # Fill the fields of the histogram proto
-        hist = tf.HistogramProto()
+        hist = HistogramProto()
         hist.min = float(np.min(values))
         hist.max = float(np.max(values))
         hist.num = int(np.prod(values.shape))
@@ -87,7 +94,7 @@ class Logger(object):
             hist.bucket.append(c)
 
         # Create and write Summary
-        summary = tf.Summary(value=[tf.Summary.Value(tag=tag, histo=hist)])
+        summary = Summary(value=[Summary.Value(tag=tag, histo=hist)])
         self.writer.add_summary(summary, step)
         self.writer.flush()
 

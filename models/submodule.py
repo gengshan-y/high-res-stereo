@@ -101,7 +101,7 @@ class decoderBlock(nn.Module):
         self.up = False
         if up:
             self.up = True
-            self.up = nn.Sequential(nn.Upsample(scale_factor=(2,2,2),mode='trilinear'),
+            self.up = nn.Sequential(nn.Upsample(scale_factor=(2,2,2),mode='trilinear', align_corners=True),
                                  sepConv3d(channelF, channelF//2, 3, (1,1,1),1,bias=False),
                                  nn.ReLU(inplace=True))
 
@@ -139,7 +139,7 @@ class decoderBlock(nn.Module):
                 kernel_size = (int(d/pool_size), int(h/pool_size), int(w/pool_size))
                 out = F.avg_pool3d(fvl, kernel_size, stride=kernel_size)       
                 out = self.pool_convs[i](out)
-                out = F.upsample(out, size=(d,h,w), mode='trilinear')
+                out = F.interpolate(out, size=(d,h,w), mode='trilinear', align_corners=True)
                 fvl_out = fvl_out + 0.25*out
             fvl = F.relu(fvl_out/2.,inplace=True)
 

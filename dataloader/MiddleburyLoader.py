@@ -4,6 +4,7 @@ import numpy as np
 import torch.utils.data as data
 import torchvision
 from PIL import Image
+import os
 
 from utils import preprocess
 from utils import readpfm as rp
@@ -65,10 +66,10 @@ class myImageFloder(data.Dataset):
         dataL[~np.isfinite(dataL)] = 0
         disp_R = None
 
-        if not (self.disp_R is None):
-            disp_R = self.disp_R[index]
-            dataR = self.dploader(disp_R, self.flip_disp_ud)
-            dataR[~np.isfinite(dataR)] = 0
+        if self.disp_R is not None:
+            if os.path.exists(self.disp_R[index]):
+                dataR = self.dploader(self.disp_R[index], self.flip_disp_ud)
+                dataR[~np.isfinite(dataR)] = 0
 
         max_h = 2048 // 4
         max_w = 3072 // 4

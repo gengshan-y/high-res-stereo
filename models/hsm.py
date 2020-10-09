@@ -72,18 +72,18 @@ class HSMNet(nn.Module):
 
         feat5_2x, cost5 = self.decoder5(feat5)
         if self.level > 2:
-            cost3 = F.upsample(cost5, [left.size()[2],left.size()[3]], mode='bilinear')
+            cost3 = F.interpolate(cost5, [left.size()[2],left.size()[3]], mode='bilinear', align_corners=True)
         else:
             feat4 = torch.cat((feat5_2x, feat4),dim=1)
 
             feat4_2x, cost4 = self.decoder4(feat4) # 32
             if self.level > 1:
-                cost3 = F.upsample((cost4).unsqueeze(1), [self.disp_reg8.disp.shape[1], left.size()[2],left.size()[3]], mode='trilinear').squeeze(1)
+                cost3 = F.interpolate((cost4).unsqueeze(1), [self.disp_reg8.disp.shape[1], left.size()[2],left.size()[3]], mode='trilinear', align_corners=True).squeeze(1)
             else:
                 feat3 = torch.cat((feat4_2x, feat3),dim=1)
 
                 feat3_2x, cost3 = self.decoder3(feat3) # 32
-                cost3 = F.upsample(cost3, [left.size()[2],left.size()[3]], mode='bilinear')
+                cost3 = F.interpolate(cost3, [left.size()[2],left.size()[3]], mode='bilinear', align_corners=True)
         if self.level > 2:
             final_reg = self.disp_reg32
         else:
@@ -96,9 +96,9 @@ class HSMNet(nn.Module):
             pred3[entropy>self.clean] = np.inf
 
         if self.training:
-            cost6 = F.upsample((cost6).unsqueeze(1), [self.disp_reg8.disp.shape[1], left.size()[2],left.size()[3]], mode='trilinear').squeeze(1)
-            cost5 = F.upsample((cost5).unsqueeze(1), [self.disp_reg8.disp.shape[1], left.size()[2],left.size()[3]], mode='trilinear').squeeze(1)
-            cost4 = F.upsample(cost4, [left.size()[2],left.size()[3]], mode='bilinear')
+            cost6 = F.interpolate((cost6).unsqueeze(1), [self.disp_reg8.disp.shape[1], left.size()[2],left.size()[3]], mode='trilinear', align_corners=True).squeeze(1)
+            cost5 = F.interpolate((cost5).unsqueeze(1), [self.disp_reg8.disp.shape[1], left.size()[2],left.size()[3]], mode='trilinear', align_corners=True).squeeze(1)
+            cost4 = F.interpolate(cost4, [left.size()[2],left.size()[3]], mode='bilinear', align_corners=True)
             pred6 = self.disp_reg16(F.softmax(cost6,1))
             pred5 = self.disp_reg16(F.softmax(cost5,1))
             pred4 = self.disp_reg16(F.softmax(cost4,1))
