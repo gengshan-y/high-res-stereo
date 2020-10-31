@@ -44,7 +44,7 @@ class HSMNet(nn.Module):
         '''
         width = refimg_fea.shape[-1]
         cost = Variable(torch.cuda.FloatTensor(refimg_fea.size()[0], refimg_fea.size()[1], maxdisp,  refimg_fea.size()[2],  refimg_fea.size()[3]).fill_(0.))
-        for i in range(maxdisp):
+        for i in range(min(maxdisp, width)):
             feata = refimg_fea[:,:,:,i:width]
             featb = targetimg_fea[:,:,:,:width-i]
             # concat
