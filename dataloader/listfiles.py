@@ -9,7 +9,7 @@ import glob
 
 
 def dataloader(filepath):
-  img_list = [i.split('/')[-1] for i in glob.glob('%s/*'%filepath) if os.path.isdir(i)]
+  img_list = [i.split('/')[-1].split('\\')[-1] for i in glob.glob('%s/*'%filepath) if os.path.isdir(i)]
 
   left_train  = ['%s/%s/im0.png'% (filepath,img) for img in img_list]  
   right_train = ['%s/%s/im1.png'% (filepath,img) for img in img_list]
