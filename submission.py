@@ -1,5 +1,6 @@
 import argparse
 import cv2
+import math
 from models import hsm
 import numpy as np
 import os
@@ -73,6 +74,8 @@ def main():
         imgsize = imgL_o.shape[:2]
 
         if args.max_disp>0:
+            if args.max_disp % 16 != 0:
+                args.max_disp = 16 * math.floor(args.max_disp/16)
             max_disp = int(args.max_disp)
         else:
             with open(test_left_img[inx].replace('im0.png','calib.txt')) as f:
