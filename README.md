@@ -73,7 +73,7 @@ uncertainty map (brighter->higher uncertainty)
 - [Eth3D](https://www.eth3d.net/datasets#low-res-two-view-training-data)
 
 ### test
-[High-res-real-stereo (HR-RS)](): comming soon
+High-res-real-stereo (HR-RS) It has been taken off due to licensing issue. Please use the [Argoverse dataset](https://eval.ai/web/challenges/challenge-page/1704/overview).
 
 ## Train
 1. Download and extract training data in folder /d/. Training data include Middlebury train set, HR-VS, KITTI-12/15, ETH3D, and SceneFlow.
